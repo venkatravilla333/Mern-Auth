@@ -18,8 +18,9 @@ function Login() {
     axios
       .post('http://localhost:5000/login', data)
       .then((res) => {
-        console.log(res);
-        navigate('/profile');
+        console.log(res.data.token)
+        window.localStorage.setItem('jwt-token', res.data.token)
+        // navigate('/profile');
       })
       .catch(() => {});
   };

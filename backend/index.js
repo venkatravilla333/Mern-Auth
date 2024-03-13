@@ -3,6 +3,7 @@
 
 import express from 'express'
 import cors from 'cors'
+import jwt from 'jsonwebtoken'
 
 import { PORT } from './config.js'
 import {dbURL} from './config.js'
@@ -55,8 +56,6 @@ app.post('/signup', async(req, res) => {
 
     let user = await User.create(newUser)
     return res.status(201).send('User is created successfully')
-
-
     
   } catch (error) {
   return  res.status(500).send('Internal Server Error')
@@ -84,8 +83,10 @@ app.post('/login', async(req, res) => {
       return res.status(400).send('Invalid credentails')
     }
     
-    if (existUser) {
-      return res.status(200).send('Login success')
+    if (existUser.email && existUser.password) {
+     
+      let token = jwt.sign({ id: existUser._id }, 'secret', { expiresIn: '1d' })
+      return res.json({token, userID:existUser._id })
     }
     
   } catch (error) {
@@ -93,6 +94,20 @@ app.post('/login', async(req, res) => {
   }
 })
 
+
+
+
+//Route for accessing user profile
+
+app.get('/profile',(req, res) => {
+  try {
+
+    
+  } catch (error) {
+   return res.status(500).send('Internal server error')
+  }
+  
+})
 
 
 mongoose.connect(dbURL)

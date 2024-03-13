@@ -1,6 +1,19 @@
+import axios from 'axios'
 import React from 'react'
 
 function Myprofile() {
+  let jwtToken = window.localStorage.getItem('jwt-token')
+  console.log(jwtToken)
+
+  axios.get('http://localhost:5000/profile', {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${jwtToken}`
+    }
+  })
+  .then(()=>{})
+  .catch(()=>{})
+
   return (
     <div className='bg-dark text-white vh-100 pt-5'>
         <h2 className='text-center pt-2'>Profile</h2>
