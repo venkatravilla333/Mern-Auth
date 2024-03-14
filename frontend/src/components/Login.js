@@ -7,6 +7,10 @@ function Login() {
   var [email, setEmail] = useState('');
   var [password, setPassword] = useState('');
 
+  var [token, setToken] = useState(null)
+  
+  // setToken(localStorage.getItem('jwt-token'))
+
   var navigate = useNavigate();
 
   var submitHandler = (e) => {
@@ -19,11 +23,17 @@ function Login() {
       .post('http://localhost:5000/login', data)
       .then((res) => {
         console.log(res.data.token)
-        window.localStorage.setItem('jwt-token', res.data.token)
+       setToken(window.localStorage.setItem('jwt-token', res.data.token))
         // navigate('/profile');
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.log(err)
+      });
   };
+
+  if (token) {
+  return  navigate('/profile')
+  }
 
   return (
     <div className='container mt-4'>

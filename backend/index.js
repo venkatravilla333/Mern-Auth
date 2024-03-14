@@ -4,6 +4,7 @@
 import express from 'express'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
+var auth = require('./authMiddleware.js')
 
 import { PORT } from './config.js'
 import {dbURL} from './config.js'
@@ -95,13 +96,18 @@ app.post('/login', async(req, res) => {
 })
 
 
-
-
 //Route for accessing user profile
 
-app.get('/profile',(req, res) => {
+app.get('/profile',auth, async(req, res) => {
   try {
+    let exist = await User.findById(req.user.id)
+    if (!exist) {
+      return res.send('User not found')
+    } else {
+      return res.json(exist)
+    }
 
+    
     
   } catch (error) {
    return res.status(500).send('Internal server error')
