@@ -4,8 +4,7 @@
 import express from 'express'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
-var auth = require('./authMiddleware.js')
-
+import { auth } from './authMiddleware.js'
 import { PORT } from './config.js'
 import {dbURL} from './config.js'
 import mongoose from 'mongoose'
@@ -87,6 +86,7 @@ app.post('/login', async(req, res) => {
     if (existUser.email && existUser.password) {
      
       let token = jwt.sign({ id: existUser._id }, 'secret', { expiresIn: '1d' })
+        console.log('login:', token)
       return res.json({token, userID:existUser._id })
     }
     
@@ -100,14 +100,13 @@ app.post('/login', async(req, res) => {
 
 app.get('/profile',auth, async(req, res) => {
   try {
-    let exist = await User.findById(req.user.id)
+    let exist = await User.findById(req.id)
+    console.log('user from db after auth:', exist)
     if (!exist) {
       return res.send('User not found')
     } else {
       return res.json(exist)
     }
-
-    
     
   } catch (error) {
    return res.status(500).send('Internal server error')

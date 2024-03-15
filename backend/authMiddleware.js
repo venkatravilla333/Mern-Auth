@@ -1,11 +1,21 @@
 import jwt from 'jsonwebtoken'
 
-module.exports = (req, res, next) => {
-  var token = req.headers.Authorization
-  if (!token) {
-    return res.send('Token no found')
+export let auth = (req, res, next) => {
+  try {
+    var token = req.header('myToken');
+    console.log('middleware:', token);
+    if (!token) {
+      return res.send('Token not found');
+    } else {
+      var decode = jwt.verify(token, 'secret');
+      console.log('token decoded:', decode)
+      req.id = decode.id;
+      console.log('after decoded ID:', decode.id)
+      next();
+    }
+    
+  } catch (error) {
+    console.log('error while receive token')
   }
-  var decode = jwt.verify(token, 'secret')
-  req.user = decode.user
-  next()
+  
 }

@@ -8,9 +8,8 @@ function Login() {
   var [password, setPassword] = useState('');
 
   var [token, setToken] = useState(null)
+  console.log(token)
   
-  // setToken(localStorage.getItem('jwt-token'))
-
   var navigate = useNavigate();
 
   var submitHandler = (e) => {
@@ -22,19 +21,19 @@ function Login() {
     axios
       .post('http://localhost:5000/login', data)
       .then((res) => {
-        console.log(res.data.token)
-       setToken(window.localStorage.setItem('jwt-token', res.data.token))
-        // navigate('/profile');
+        // console.log(res.data.token)
+        localStorage.setItem('jwt-token', res.data.token)
+        setToken(localStorage.getItem('jwt-token'))
       })
       .catch((err) => {
         console.log(err)
       });
-  };
-
-  if (token) {
-  return  navigate('/profile')
-  }
-
+    };
+    
+    if(token) {
+     return navigate('/profile')
+    }
+    
   return (
     <div className='container mt-4'>
       <div className='row'>
