@@ -1,46 +1,30 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
 import Home from "./components/Home";
+import PvtRoute from "./PvtRoute";
+import Nav from "./components/Nav";
+import isLoggedIn from "./isLoggedIn";
+import Dashboard from "./components/Dashboard";
 
-var token = localStorage.getItem('jwt-token')
 
 function App() {
+ let location = useLocation()
   
   return (
     <div>
-      
-        <div className='d-flex justify-content-end bg-dark'>
-          <Link
-            to='/signup'
-            style={{
-              margin: '20px',
-              textDecoration: 'none',
-              fontSize: '20px',
-              fontWeight: 'bold',
-            }}
-          >
-            Signup
-          </Link>
-          <Link
-            to='/login'
-            style={{
-              margin: '20px',
-              textDecoration: 'none',
-              fontSize: '20px',
-              fontWeight: 'bold',
-            }}
-          >
-            Login
-          </Link>
-        </div>
-      
+      {location.pathname === '/' && <Nav />}
+
       <Routes>
         <Route path='/signup' element={<Signup />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route path='/' element={<Home />} />
+        <Route path='' element={<PvtRoute />}>
+          <Route path='profile' element={<Profile />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+        </Route>
+        
       </Routes>
     </div>
   );

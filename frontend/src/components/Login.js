@@ -8,7 +8,6 @@ function Login() {
   var [password, setPassword] = useState('');
 
   var [token, setToken] = useState(null)
-  console.log(token)
   
   var navigate = useNavigate();
 
